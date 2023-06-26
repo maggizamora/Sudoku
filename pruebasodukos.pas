@@ -6,6 +6,9 @@ var z: integer;
 var fila1: array [1..mag] of integer;
 	a: integer;
 
+{El inicio y darle una breve explicacion al usuario lo considero fundamental, 
+  ademas de que se ve bonito y organizado. }
+  
 procedure inicio;
 	begin
 	writeln ('          Te doy la bienvenida al SUDOKU MAGGY & JUAN.');
@@ -20,6 +23,8 @@ procedure inicio;
 	writeln ();
 	end;
 
+{Quise agregarle esta funcion desde el principio. }
+ 
 procedure abandonar;
 	begin
 	writeln ('              PULSA 1 PARA CONTINUAR EN EL JUEGO.');
@@ -33,6 +38,10 @@ procedure abandonar;
 		end;
 	end;
 	
+	
+{Te recomiendo que no muevas lo que esta en verde porque se movera absolutamente todo lo de esa fila.
+ La estructura del soduko radica en esto. Lo quise llamar procedimiento porque presiento que es mas comodo de manejarlo}
+ 
 procedure bloques;
 begin
 	WRITE ('    SUDOKO MAGGY & JUAN.          ');
@@ -41,29 +50,31 @@ begin
 	for a:=1 to mag do
 	begin
 	writeln (' -------  -------  -------');
-	write ('');	write (' '); write ('|'); write (' '); fila1 [a] := random(9); write ('|'); write (fila1[a],'','|'); write (' '); write ('|'); write ('  '); write ('|'); write (' '); write ('|'); write (' '); write ('|'); write (' '); write ('|'); write ('  '); write ('|');;fila1 [a] := random(9); write (fila1[a],'','|'); write (' '); write ('|'); write (' '); write ('|');
+	write (' |'); fila1 [a] := random(9); write (' |'); write (fila1[a],'| |  | | | |  |'); fila1 [a] := random(9); write (fila1[a],'| | |');
 	writeln ();
-	write (' '); write ('|'); write (' '); write ('|'); write (' '); write ('|'); write (' '); write ('|');write (' '); write (' '); write ('|'); write (''); fila1 [a] := random(9); write (fila1[a],'','|');fila1 [a] := random(9); write (fila1[a],'','|'); write (' '); write ('|');write (' '); write (' '); write ('|'); fila1 [a] := random(9); write (fila1[a],'','|'); write (' '); write ('|'); write (' '); write ('|');
+	write (' '); write ('| | | |  |'); fila1 [a] := random(9); write (fila1[a],'|'); fila1 [a] := random(9); write (fila1[a],'| |  |'); fila1 [a] := random(9); write (fila1[a],'| | |');
 	writeln ();
-	write (' '); write ('|'); fila1 [a] := random(9); write (fila1[a],'','|');write (' '); write ('|');	write (' '); write ('|');write ('  '); write ('|');write (' '); write ('|');write (''); fila1 [a] := random(9); write (fila1[a],'','|');write (''); write (' '); write ('|'); write ('  '); write ('|'); write (' '); write ('|');write (' '); write ('|'); fila1 [a] := random(9); write (fila1[a],'','|');
-	writeln ();
-	writeln (' -------  -------  -------');
-	write (' '); write ('|'); write (' '); write ('|'); write (' '); write ('|'); write (' '); write ('|');write (' '); write (' '); write ('|'); write (''); fila1 [a] := random(9); write (fila1[a],'','|');fila1 [a] := random(9); write (fila1[a],'','|'); write (' '); write ('|');write (' '); write (' '); write ('|'); fila1 [a] := random(9); write (fila1[a],'','|'); write (' '); write ('|'); write (' '); write ('|');
-	writeln ();
-	write (' '); write ('|'); fila1 [a] := random(9); write (fila1[a],'','|');write (' '); write ('|');	write (' '); write ('|');write ('  '); write ('|');write (' '); write ('|');write (''); fila1 [a] := random(9); write (fila1[a],'','|');write (''); write (' '); write ('|'); write ('  '); write ('|'); write (' '); write ('|');write (' '); write ('|'); fila1 [a] := random(9); write (fila1[a],'','|');
-	writeln ();
-	write (' '); write ('|'); write (fila1[a],'','|'); write (' '); write ('|'); write (' '); write ('|'); write ('  '); write ('|'); write (' '); write ('|'); write (' '); write ('|'); write (' '); write ('|'); write ('  '); write ('|');  fila1 [a] := random(9); write (fila1[a],'','|'); write (' '); write ('|'); write (' '); write ('|');
+	write (' |'); fila1 [a] := random(9); write (fila1[a],'| | |  | |'); fila1 [a] := random(9); write (fila1[a],'| |  | | |'); fila1 [a] := random(9); write (fila1[a],'|');
 	writeln ();
 	writeln (' -------  -------  -------');
-	write (' '); write ('|'); write (fila1[a],'','|'); write (' '); write ('|'); write (' '); write ('|'); write ('  '); write ('|'); write (' '); write ('|'); write (' '); write ('|'); write (' '); write ('|'); write ('  '); write ('|');  fila1 [a] := random(9); write (fila1[a],'','|'); write (' '); write ('|'); write (' '); write ('|');
+	write (' | | | |  |'); fila1 [a] := random(9); write (fila1[a],'|');fila1 [a] := random(9); write (fila1[a],'| |  |'); fila1 [a] := random(9); write (fila1[a],'| | |');
 	writeln ();
-	write (' '); write ('|'); write (' '); write ('|'); write (' '); write ('|'); write (' '); write ('|');write (' '); write (' '); write ('|'); write (''); fila1 [a] := random(9); write (fila1[a],'','|');fila1 [a] := random(9); write (fila1[a],'','|'); write (' '); write ('|');write (' '); write (' '); write ('|'); fila1 [a] := random(9); write (fila1[a],'','|'); write (' '); write ('|'); write (' '); write ('|');
+	write (' |'); fila1 [a] := random(9); write (fila1[a],'| | |  | |'); fila1 [a] := random(9); write (fila1[a],'| |  | | |'); fila1 [a] := random(9); write (fila1[a],'|');
 	writeln ();
-	write (' '); write ('|'); fila1 [a] := random(9); write (fila1[a],'','|');write (' '); write ('|');	write (' '); write ('|');write ('  '); write ('|');write (' '); write ('|');write (''); fila1 [a] := random(9); write (fila1[a],'','|');write (''); write (' '); write ('|'); write ('  '); write ('|'); write (' '); write ('|');write (' '); write ('|'); fila1 [a] := random(9); write (fila1[a],'','|');
+	write (' |'); write (fila1[a],'| | |  | | | |  |');  fila1 [a] := random(9); write (fila1[a],'| | |');
+	writeln ();
+	writeln (' -------  -------  -------');
+	write (' |'); write (fila1[a],'| | |  | | | |  |');  fila1 [a] := random(9); write (fila1[a],'| | |');
+	writeln ();
+	write (' | | | |  |'); fila1 [a] := random(9); write (fila1[a],'|');fila1 [a] := random(9); write (fila1[a],'| |  |'); fila1 [a] := random(9); write (fila1[a],'| | |');
+	writeln ();
+	write (' |'); fila1 [a] := random(9); write (fila1[a],'| | |  | |'); fila1 [a] := random(9); write (fila1[a],'| |  | | |'); fila1 [a] := random(9); write (fila1[a],'|');
 	writeln ();
 	writeln (' -------  -------  -------');
 	end;
 end;
+
+{Este es el codigo principal, le agregue ese color, si deseas cambiar algo, no hay problema, siempre y cuando, compile JAJJAJAJAJA }
 
 begin
 textcolor (cyan);
@@ -73,3 +84,5 @@ clrscr;
 if z = 1 then
 bloques;
 end.
+
+{Mi meta era optimizarlo lo mas posible para no hacerlo tan tedioso, ademas, tenemos las herramientas para hacerlo. En fin, me avisai cualquier cosilla.}
