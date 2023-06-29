@@ -1,0 +1,333 @@
+﻿programa sudokumaggyjuan;
+
+Usa 
+SysUtils, Crt;
+
+Tipo 
+  tablero = arreglo [1..9, 1..9] de enteros;
+
+Variables:
+  sudoku: tablero;
+
+Procedimiento imprimir(Constante sudoku: tablero);
+
+Variables 
+  i, j: Enteras;
+Inicio 
+  Limpiar pantalla;
+  Imprimir ('-------------------------');
+  Para i := 1 hasta 9 hacer
+    Inicio 
+      Para j := 1 hasta 9 hacer
+        Inicio
+          si (j = 1) entonces
+            Imprimir('| ');
+
+          si sudoku[i, j] = 0 entonces 
+            Imprimir ('  ')
+          Sino 
+            Imprimir (sudoku[i, j], ' ');
+
+          si (j Mod 3 = 0) y (j <> 9) entonces
+            imprimir ('| ');
+        fin;
+
+      imprimir('|');
+
+      si (i Mod 3 = 0) y (i <> 9) entonces
+        imprimir ('-------------------------');
+    fin;
+  imprimir('-------------------------');
+fin;
+
+Función numcorrect(Constantes: sudoku: tablero; fila, colum, num: Enteras): Boleanas;
+
+Variables 
+  i, j, inicf, inicc: Enteros;
+Inicio
+  // Comprueba si el número es válido en la fila y colum
+  PAra i := 1 hasta 9 hacer
+    inicio
+      si (sudoku[fila, i] = num) o (sudoku[i, colum] = num) entonces
+        Exit(Falso);
+    fin;
+
+  // Comprueba si el número es válido en el subcuadro 3x3
+  inicf := ((fila - 1) Div 3) * 3 + 1;
+  inicc := ((colum - 1) Div 3) * 3 + 1;
+
+  para i := inicf hasta inicf + 2 hacer
+    inicio
+      para j := inicc hasta inicc + 2 hacer
+        inicio
+          si sudoku[i, j] = num entonces
+            Exit(Falso);
+        fin;
+    fin;
+
+  Exit(Verdad);
+fin;
+
+Procedimiento generar(Variables: sudoku: tablero);
+
+Variables:
+  fila, colum, num, pista, i ,j: Entero;
+  corrnum: arreglo [1..9] de Boleanos;
+Inicio
+  randomizar;
+
+  // Inicializa el tablero con ceros
+  para fila := 1 hasta 9 hacer 
+    inicio
+      para colum := 1 hasta 9 hacer
+        sudoku[fila, colum] := 0;
+    fin;
+
+  pista := 0;
+  mientras que pista < 17 Do
+    inicio
+      fila := aleatorio (9) + 1;
+      colum := aleatorio (9) + 1;
+
+      // Inicializa el arreglo de números válidos
+      para num := 1 hasta 9 hacer
+        corrnum[num] := verdadero;
+
+      // Comprueba los números en la fila y colum actual
+      Para num := 1 hasta 9 hacer
+        Inicio
+          si sudoku[fila, num] <> 0 entonces
+            corrnum[sudoku[fila, num]] := Falso;
+          si sudoku[num, colum] <> 0 entonces
+            corrnum[sudoku[num, colum]] := Falso;
+        fin;
+
+      // Comprueba los números en el subcuadro 3x3 actual
+      para i := 1 hasta 3 hacer
+        inicio
+          para j := 1 hasta 3 hacer
+            Inicio
+              num := sudoku[((fila - 1) Div 3) * 3 + i, ((colum - 1) Div 3) * 3 + j];
+              si num <> 0 entonces
+                corrnum[num] := Falso;
+           fin;
+        fin;
+
+      Repetir
+        num := aleatorio (9) + 1;
+      hasta corrnum[num];
+
+      // Si la celda está vacía, asigna un número válido a la celda y aumenta el contador de pistas generadas
+      si sudoku[fila, colum] = 0 entonces
+        inicio
+          sudoku[fila, colum] := num;
+          Inc(pista);
+        fin;
+    fin;
+fin;
+
+Procedimiento ingresarnum(Variables: sudoku: tablero);
+
+Variables:  
+  fila, colum, num: Entero;
+Inicio
+  imprimir ('Ingresa la fila (1-9): ');
+  leer (fila);
+  imprimir ('Ingresa la colum (1-9): ');
+  leer (colum);
+  imprimir ('Ingresa el num (1-9): ');
+  leer (num);
+
+  si (fila >= 1) y (fila <= 9) y (colum >= 1) y (colum <= 9) y (num >= 1) y (num <= 9) entonces
+    inicio
+      // Comprueba si la posición está ocupada
+      si sudoku[fila, colum] = 0 entonces
+        inicio
+          // Comprueba si el número ingresado es válido en esa posición
+          si numcorrect(sudoku, fila, colum, num) entonces
+            inicio
+              sudoku[fila, colum] := num;
+              imprimir(sudoku);
+            fin
+          sino
+            imprimir ('El num ingresado no es valido en esa posicion.');
+        fin
+      sino
+        imprimir ('La posicion ya esta ocupada.');
+    fin
+  sino
+    imprimir('Valores ingresados invalidos.');
+fin;
+
+Funcion resolvsud(Variables: sudoku: tablero): Boleana;
+
+Variables: 
+  fila, colum, num: enteras;
+  espvacio: Boleana;
+inicio
+  fila := 1;
+  colum := 1;
+  espvacio := Falso;
+
+  // Encuentra la primera celda vacía
+  mientras que (fila <= 9) y (Not espvacio) hacer
+    inico
+      colum := 1;
+
+      mientras que (colum <= 9) y (Not espvacio) hacer
+        inicio
+          si sudoku[fila, colum] = 0 entonces
+            espvacio := verdad
+          sino
+            Inc(colum);
+        fin;
+
+      si no espvacio entonces
+        Inc(fila);
+    fin;
+
+  // Si no se encuentra ninguna celda vacía, el sudoku está resuelto
+  si no espvacio hacer
+    Exit(verdad);
+
+  num := 1;
+  mientras que num <= 9 hacer
+    hacer
+      // Si el número es válido en esa posición, se asigna y se intenta resolver el sudoku recursivamente
+      si numcorrect(sudoku, fila, colum, num) hacer
+        inicio
+          sudoku[fila, colum] := num;
+
+          si resolvsud(sudoku) hacer
+            Exit(Verdad);
+
+          sudoku[fila, colum] := 0;
+        fin;
+
+      Inc(num);
+    fin;
+
+  Exit(Falso);
+fin;
+
+Procedimiento verifsud(Constantes: sudoku: tablero);
+Variables:  
+  i, j: Enteras;
+Funcion vgrupo(inicf, finalf, inicc, finalc: Enteras): Boleana;
+
+Variables:
+  i, j, num: Enteras;
+  corrnum: arreglo [1..9] de Boleanos;
+inicio
+  FillChar(corrnum, SizeOf(corrnum), verdad);
+
+  para i := inicf hasta finalf hacer
+    inicio
+      para j := inicc hasta finalc hacer
+        inicio
+          num := sudoku[i, j];
+          si (num < 1) O (num > 9) entonces
+            Exit(Falso);
+          si no corrnum[num] entonces
+            Exit(Falso);
+          corrnum[num] := Falso;
+        fin;
+    fin;
+
+  Exit(verdad);
+fin;
+
+inicio
+  // Verificar filas
+  para i := 1 hasta 9 hacer
+    inicio
+      si no vgrupo(i, i, 1, 9) entonces
+        Inicio
+          imprimir ('El sudoku no esta completo o no es valido.');
+          exit;
+        fin;
+    fin;
+
+  // Verificar colums
+  para j := 1 hasta 9 hacer
+    inicio
+      si no vgrupo(1, 9, j, j) entonces
+        inicio
+          imprimir ('El sudoku no esta completo o no es valido.');
+          Exit;
+        fin;
+    fin;
+
+  // Verificar subcuadros
+  para i := 0 hasta 2 hacer
+    inicio
+      para j := 0 hasta 2 hacer
+        inicio
+          Si no vgrupo(i * 3 + 1, i * 3 + 3, j * 3 + 1, j * 3 + 3) entonces
+            inicio
+              imprimir('El sudoku no esta completo o no es valido.');
+              Exit;
+            fin;
+        fin;
+    fin;
+
+  // Si todas las filas, colums y subcuadros son válidos, el sudoku está completo y válido
+  imprimir ('Felicidades, has completado el sudoku correctamente');
+  Halt;
+fin;
+
+
+
+Procedimiento juguemos;
+
+Variables: 
+  opc: entera;
+inicio
+  Repetir
+    imprimir('Presiona 1 para ingresar un numero.');
+    imprimir('Presiona 2 para mostrar la solucion.');
+    imprimir('Presiona 3 para salir.');
+    imprimir('opc: ');
+    Leer (opc);
+    verifsud(sudoku);
+
+    caso opc de
+      1: ingresarnum(sudoku);
+
+      2:
+           inicio
+             imprimir ('Mostrando solucion...');
+             resolvsud(sudoku);
+             imprimir (sudoku);
+             verifsud(sudoku);
+           fin;
+      3: 
+      Inicio
+      imprimir ('Saliendo del juego...');
+      halt;
+      fin;
+      sino
+        imprimir('opc invalida.');
+    fin;
+  hasta que opc = 0;
+fin;
+
+Inicio
+  limpiar pantalla;
+
+  imprimir('Bienvenido al SUDOKU MAGGY & JUAN!');
+  imprimir;
+  imprimir('El sudoku es un juego de logica en el cual debes completar una cuadricula de 9x9');
+  imprimir('dividida en subcuadros de 3x3 con nums del 1 al 9, de modo que cada fila,');
+  imprimir('cada columna y cada subcuadro contengan todos los numeros del 1 al 9 sin repetir.');
+  imprimir;
+  imprimir('Diviertete jugando al sudoku');
+  imprimir;
+  imprimir('Presiona ENTER para comenzar...');
+  Leer;
+
+  Limpiar pantalla;
+  generar(sudoku);
+  imprimir(sudoku);
+  juguemos;
+Fin.
